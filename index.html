@@ -25,7 +25,13 @@
         const apiKey = 'ac741ba432428f7121fa68dcecce58a4'; // Your GNews API key
         const url = `https://gnews.io/api/v4/top-headlines?category=technology&lang=en&max=10&apikey=${apiKey}`;
 
-        fetch(url)
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'User-Agent': 'Mozilla/5.0' // Mimic a browser user agent
+            }
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
@@ -67,6 +73,11 @@
                         <h3>The Verge</h3>
                         <p>Tech reviews and breaking news.</p>
                         <p><a href="https://theverge.com" target="_blank">Visit The Verge</a></p>
+                    </div>
+                    <div class="news-item">
+                        <h3>Engadget</h3>
+                        <p>Gadget news and reviews.</p>
+                        <p><a href="https://engadget.com" target="_blank">Visit Engadget</a></p>
                     </div>
                 `;
             });
