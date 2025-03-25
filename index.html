@@ -52,7 +52,23 @@
             })
             .catch(error => {
                 console.error('Error fetching news:', error);
-                document.getElementById('error').innerText = `Failed to load news: ${error.message}`;
+                const errorDiv = document.getElementById('error');
+                errorDiv.innerText = `Failed to load news: ${error.message}`;
+
+                // Fallback: Hardcoded tech news links
+                const newsContainer = document.getElementById('news-container');
+                newsContainer.innerHTML = `
+                    <div class="news-item">
+                        <h3>TechCrunch</h3>
+                        <p>Latest tech news and updates.</p>
+                        <p><a href="https://techcrunch.com" target="_blank">Visit TechCrunch</a></p>
+                    </div>
+                    <div class="news-item">
+                        <h3>The Verge</h3>
+                        <p>Tech reviews and breaking news.</p>
+                        <p><a href="https://theverge.com" target="_blank">Visit The Verge</a></p>
+                    </div>
+                `;
             });
     </script>
 </body>
