@@ -22,15 +22,10 @@
     <div id="error"></div>
 
     <script>
-        const apiKey = '014a90540ed64248b865582baaad0a54'; // Your API key
-        const url = `https://newsapi.org/v2/top-headlines?category=technology&language=en&apiKey=${apiKey}`;
+        const apiKey = 'ac741ba432428f7121fa68dcecce58a4'; // Your GNews API key
+        const url = `https://gnews.io/api/v4/top-headlines?category=technology&lang=en&max=10&apikey=${apiKey}`;
 
-        fetch(url, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        })
+        fetch(url)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
@@ -40,7 +35,7 @@
             .then(data => {
                 const newsContainer = document.getElementById('news-container');
                 const errorDiv = document.getElementById('error');
-                if (data.status === "ok" && data.articles && data.articles.length > 0) {
+                if (data.articles && data.articles.length > 0) {
                     data.articles.forEach(article => {
                         const newsItem = document.createElement('div');
                         newsItem.className = 'news-item';
@@ -52,23 +47,12 @@
                         newsContainer.appendChild(newsItem);
                     });
                 } else {
-                    errorDiv.innerText = `No tech news available: ${data.message || 'Unknown issue'}`;
+                    errorDiv.innerText = 'No tech news available at the moment.';
                 }
             })
             .catch(error => {
                 console.error('Error fetching news:', error);
-                const errorDiv = document.getElementById('error');
-                errorDiv.innerText = `Failed to load news: ${error.message}`;
-                
-                // Fallback: Display hardcoded news if API fails
-                const newsContainer = document.getElementById('news-container');
-                newsContainer.innerHTML = `
-                    <div class="news-item">
-                        <h3>Fallback: Tech News Not Available</h3>
-                        <p>API failed. Check out TechCrunch for updates.</p>
-                        <p><a href="https://techcrunch.com" target="_blank">Visit TechCrunch</a></p>
-                    </div>
-                `;
+                document.getElementById('error').innerText = `Failed to load news: ${error.message}`;
             });
     </script>
 </body>
