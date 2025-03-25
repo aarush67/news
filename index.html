@@ -23,13 +23,14 @@
 
     <script>
         const apiKey = 'ac741ba432428f7121fa68dcecce58a4'; // Your GNews API key
-        const url = `https://gnews.io/api/v4/top-headlines?category=technology&lang=en&max=10&apikey=${apiKey}`;
+        // Use q=technology to filter for tech-related news
+        const url = `https://gnews.io/api/v4/top-headlines?category=general&q=technology&lang=en&max=10&apikey=${apiKey}`;
 
         fetch(url, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'User-Agent': 'Mozilla/5.0' // Mimic a browser user agent
+                'User-Agent': 'Mozilla/5.0'
             }
         })
             .then(response => {
@@ -42,18 +43,29 @@
                 const newsContainer = document.getElementById('news-container');
                 const errorDiv = document.getElementById('error');
                 if (data.articles && data.articles.length > 0) {
-                    data.articles.forEach(article => {
-                        const newsItem = document.createElement('div');
-                        newsItem.className = 'news-item';
-                        newsItem.innerHTML = `
-                            <h3>${article.title}</h3>
-                            <p>${article.description || 'No description available'}</p>
-                            <p><a href="${article.url}" target="_blank">Read more</a></p>
-                        `;
-                        newsContainer.appendChild(newsItem);
-                    });
+                    // Filter articles to ensure they contain tech-related keywords
+                    const techArticles = data.articles.filter(article =>
+                        article.title.toLowerCase().includes('tech') ||
+                        article.description?.toLowerCase().includes('tech') ||
+                        article.title.toLowerCase().includes('technology') ||
+                        article.description?.toLowerCase().includes('technology')
+                    );
+                    if (techArticles.length > 0) {
+                        techArticles.forEach(article => {
+                            const newsItem = document.createElement('div');
+                            newsItem.className = 'news-item';
+                            newsItem.innerHTML = `
+                                <h3>${article.title}</h3>
+                                <p>${article.description || 'No description available'}</p>
+                                <p><a href="${article.url}" target="_blank">Read more</a></p>
+                            `;
+                            newsContainer.appendChild(newsItem);
+                        });
+                    } else {
+                        errorDiv.innerText = 'No tech-related news found.';
+                    }
                 } else {
-                    errorDiv.innerText = 'No tech news available at the moment.';
+                    errorDiv.innerText = 'No news available at the moment.';
                 }
             })
             .catch(error => {
